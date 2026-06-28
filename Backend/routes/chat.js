@@ -1,6 +1,8 @@
 import express from  "express";
 import Thread from "../models/Thread.js"
+import getOpenAIApIResponse from "../utils/openai.js";
 const router = express.Router();
+
 
 //test
 router.post("/test",async(req,res)=>{
@@ -34,12 +36,15 @@ router.get("/thread",async(req,res)=>{
 router.get("/thread/:threadId",async(req,res)=>{
     try{
         const {threadId} = req.params;
-      const thread = await Thread.findOne({threadId});
-      if(!thread){
-        res.status(404).json({error:"Thread is not Found"});
+      let  thread = await Thread.findOne({threadId});
+
+        if(!thread){
+       return res.status(404).json({error:"Thread is not Found"});
         }
+
       res.json(thread.messages);
-    }catch(err){
+    }
+    catch(err){
         console.log(err);
         res.status(500).json({error : "Failed to Fetch Thread"});
     }
@@ -51,7 +56,7 @@ router.delete("/thread/:threadId",async(req,res)=>{
         const {threadId} = req.params;
       const deletedThread = await Thread.findOneAndDelete({threadId});
       if(!deletedThread){
-        res.status(404).json({error:"Thread is not Found"});
+       return res.status(404).json({error:"Thread is not Found"});
         
       }
       res.status(200).json({success: "Thread Deleted Successfully"});
@@ -61,6 +66,37 @@ router.delete("/thread/:threadId",async(req,res)=>{
         res.status(500).json({error : "Failed to delete Thread"});
     }
 });
+
+router.post("/chat",async(req,res)=>{
+    console.log("BODY:", req.body);
+    const {threadId,message} = req.body || {};
+
+        if(!threadId || !message){
+          return  res.status(404).json({error: "Missing required Fields"});
+        }
+    try{
+        let thread = await Thread.findOne({threadId});
+        if(!thread){
+            //create a new thread in DB
+            thread = new Thread({
+                threadId,
+                title: message,
+                messages : [{role: "user", content: message}]
+            });
+        }else{
+            thread.messages.push({role: "user", content: message})
+        }
+        const assistantReply = await getOpenAIApIResponse(message);
+        thread.messages.push({role: "assistant", content: assistantReply});
+        thread.updatedAt = new Date();
+        await thread.save();
+        res.json({reply: assistantReply})
+        
+         }catch(err){
+        console.log(err);
+         res.status(500).json({error : "Something Went Wrong"});
+    }
+})
 
 export default router;
 
