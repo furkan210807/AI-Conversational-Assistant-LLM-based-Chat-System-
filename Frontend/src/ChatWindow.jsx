@@ -1,30 +1,53 @@
 import "./ChatWindow.css";
 import Chat from "./Chat.jsx";
 import {MyContext} from "./MyContext.jsx";
-import { useContext } from "react";
+import { useContext,useState,useEffect } from "react";
+import {ScaleLoader} from "react-spinners";
 function ChatWindow(){
-    const {prompt,setPrompt,reply,setReply ,currThreadId} = useContext(MyContext);
+    const {prompt,setPrompt,reply,setReply ,currThreadId,prevChats,setPrevChats} = useContext(MyContext);
+    const [loading,setLoading] = useState(false);
     const getReply = async()=>{
+        setLoading(true);
         const options = {
             method: "POST",
             headers: {
                 "Content-Type":"application/json"
             },
-            body:JSON.stringify{
+            body:JSON.stringify({
                 message:prompt,
                 threadId:currThreadId
 
-            }
+            })
         };
         try{
            const response = await fetch("http://localhost:8080/api/chat",options);
            const res = await response.json();
            console.log(res);
+           setReply(res.reply);
 
         }catch(err){
             console.log(err);
+        }finally{
+
+            setLoading(false);
         }
     }
+    //Append New Chats to prevChats
+    useEffect(()=>{
+        if(prompt && reply){
+            setPrevChats(prevChats =>(
+                [...prevChats,{
+                    role: "user",
+                    content : prompt
+                },{
+                    role: "assistant",
+                    content : reply
+                }]
+            ));
+        }
+        setPrompt("");
+
+    },[reply])
     return (
         <div className="ChatWindow">
             <div className="navbar">
@@ -35,11 +58,15 @@ function ChatWindow(){
 
             </div>
             <Chat></Chat>
+            <ScaleLoader color="#fff" loading={loading} >
+
+            </ScaleLoader>
             <div className="chatInput">
                 <div className="inputBox">
                     <input type="text" placeholder="Ask Anything"
                     value={prompt}
-                    onChange={(e)=>setPrompt(e.target.value)} />
+                    onChange={(e)=>setPrompt(e.target.value)}
+                    onKeyDown={(e)=>e.key==='Enter'? getReply():''} />
                     
                     <div id="submit" onClick={getReply}><i className="fa-solid fa-paper-plane"></i></div>
                 </div>
