@@ -1,7 +1,8 @@
 .chats{
+    width: 100%;
      max-width: 750px;
      overflow-y: scroll;
-     padding: 8rem;
+     padding: 2rem;
 }
 
 .userDiv{
@@ -14,6 +15,7 @@
 .gptDiv{
     text-align: left;
     font-size: 0.9rem;
+    width: 100%;
 
 }
 
@@ -21,12 +23,15 @@
     background-color: #323232;
     padding: 10px 20px;
     border-radius: 14px;
-    margin-left: 15rem;
+    margin-left: auto;
     max-width: 500px;
     width: fit-content;
 
 }
 
-.gptMessage{
-
+.hljs{
+    border-radius: 14px !important;
+}
+pre{
+    white-space: pre-wrap;
 }
