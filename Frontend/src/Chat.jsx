@@ -12,6 +12,10 @@ function Chat(){
     const [latestReply,setLatestReply] = useState(null);
 
     useEffect(()=>{
+        if(reply === null){
+            setLatestReply(null);
+            return;
+        }
         //latest reply separate =. typing effect 
         if(!prevChats?.length) return;
 
@@ -44,14 +48,30 @@ function Chat(){
                     </div>
                 )
             }
+
+
             {
-                prevChats.length > 0 && latestReply !== null &&
-               <div className="gptDiv" key={"typing"}>
+                 prevChats.length > 0 && (
+                    <>
+                    {
+                        latestReply === null ?(
+                             <div className="gptDiv" key={"non-typing"}>
+                                 <ReactMarkdown rehypePlugins={rehypeHighlight}>{prevChats[prevChats.length-1].content}</ReactMarkdown>
+
+                                 </div>
+
+                        ) :(
+                             <div className="gptDiv" key={"typing"}>
                  <ReactMarkdown rehypePlugins={rehypeHighlight}>{latestReply}</ReactMarkdown>
 
                </div>
+                        )
+                    }
+                    
+                    </>
+                 )
             }
-            
+    
         </div>
         </>
     )
