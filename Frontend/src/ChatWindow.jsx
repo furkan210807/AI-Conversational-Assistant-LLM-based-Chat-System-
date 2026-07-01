@@ -22,7 +22,7 @@ function ChatWindow(){
             })
         };
         try{
-           const response = await fetch("https://your-backend.vercel.app/api/chat", options);
+           const response = await fetch("https://ai-conversational-assistant-llm-bas-bice.vercel.app/api/chat", options);
            const res = await response.json();
            console.log(res);
            setReply(res.reply);
