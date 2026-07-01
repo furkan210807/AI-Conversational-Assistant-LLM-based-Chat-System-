@@ -7,7 +7,7 @@ function Sidebar(){
     const{ allThreads,setAllThreads,currThreadId,setNewChat,setPrompt,setReply,setCurrThreadId,setPrevChats} = useContext(MyContext);
     const getAllThreads =async()=>{
         try{
-           const response = await fetch("http://localhost:8080/api/thread");
+           const response = await fetch("https://ai-conversational-assistant-llm-bas-bice.vercel.app/api/thread");
            const res = await response.json();
            const filteredData = res.map(thread =>({threadId:thread.threadId, title: thread.title}));
            console.log(filteredData);
@@ -33,7 +33,7 @@ function Sidebar(){
     const changeThread = async(newThreadId)=>{
         setCurrThreadId(newThreadId);
         try{
-            const response = await fetch(`http://localhost:8080/api/thread/${newThreadId}`);
+            const response = await fetch(`https://ai-conversational-assistant-llm-bas-bice.vercel.app/api/thread/${newThreadId}`);
             const res = await response.json();
             console.log(res);
             setPrevChats(res);
@@ -46,7 +46,7 @@ function Sidebar(){
 
     const deleteThread = async(threadId) =>{
         try{
-           const response = await fetch(`http://localhost:8080/api/thread/${threadId}`, {method : "DELETE"});
+           const response = await fetch(`https://ai-conversational-assistant-llm-bas-bice.vercel.app/api/thread/${threadId}`, {method : "DELETE"});
            const res =await response.json();
            console.log(res);
            //updates threads re-render
