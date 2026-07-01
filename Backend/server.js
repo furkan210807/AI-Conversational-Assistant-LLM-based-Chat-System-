@@ -12,30 +12,30 @@
 
 // console.log(response.output_text);
 
-import express from "express";
-import "dotenv/config";
-import cors from "cors";
-import mongoose from "mongoose";
-import chatRoutes from  "./routes/chat.js";
+// import express from "express";
+// import "dotenv/config";
+// import cors from "cors";
+// import mongoose from "mongoose";
+// import chatRoutes from  "./routes/chat.js";
 
-const app = express();
-const PORT = 8080;
-app.use(express.json());
-app.use(cors());
-app.use("/api", chatRoutes);
-app.listen(PORT,()=>{
-  console.log(`Port is Listening ${PORT}`);
-  connectDB();
-});
+// const app = express();
+// const PORT = 8080;
+// app.use(express.json());
+// app.use(cors());
+// app.use("/api", chatRoutes);
+// app.listen(PORT,()=>{
+//   console.log(`Port is Listening ${PORT}`);
+//   connectDB();
+// });
 
-const connectDB = async()=>{
-  try{
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected with DataBase");
-  } catch(err){
-    console.log("Failed Connected With DataBase",err);
-  }
-}
+// const connectDB = async()=>{
+//   try{
+//     await mongoose.connect(process.env.MONGODB_URI);
+//     console.log("Connected with DataBase");
+//   } catch(err){
+//     console.log("Failed Connected With DataBase",err);
+//   }
+// }
 
 // app.post("/test", async(req,res)=>{
 //     const options  = {
@@ -63,3 +63,30 @@ const connectDB = async()=>{
 //         console.log(err);
 //         }
 // })
+
+
+
+import express from "express";
+import "dotenv/config";
+import cors from "cors";
+import mongoose from "mongoose";
+import chatRoutes from "./routes/chat.js";
+
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+app.use("/api", chatRoutes);
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Connected with DataBase");
+  } catch (err) {
+    console.log("Failed Connected With DataBase", err);
+  }
+};
+
+connectDB();
+
+export default app;
