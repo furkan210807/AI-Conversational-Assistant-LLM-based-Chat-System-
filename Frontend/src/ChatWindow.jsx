@@ -60,7 +60,7 @@ function ChatWindow(){
     return (
         <div className="ChatWindow">
             <div className="navbar">
-                <span>SigmaGPT <i className="fa-solid fa-angle-down"></i></span>
+                <span>Personal GPT <i className="fa-solid fa-angle-down"></i></span>
                 <div className="userIconDiv" onClick={handleProfileClick}>
                     <span className="userIcon"><i className="fa-solid fa-user"></i></span>
                 </div>
@@ -89,7 +89,7 @@ function ChatWindow(){
                     
                     <div id="submit" onClick={getReply}><i className="fa-solid fa-paper-plane"></i></div>
                 </div>
-                <p className="info">SigmaGPT Can Make Mistakes.Check Important info.See Cookie Preferences</p>
+                <p className="info">PersonalGPT Can Make Mistakes.Check Important info.See Cookie Preferences</p>
 
             </div>
             

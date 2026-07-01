@@ -94,7 +94,7 @@ function Sidebar(){
             </ul>
             {/*sign*/}
             <div className="sign">
-                <p>By Apna College &hearts;</p>
+                <p>By Md Furkan Alam &hearts;</p>
             </div>
         </section>
     )
